@@ -18,7 +18,7 @@ class SettingsUI {
 
     this.blockchain.event.register('transactionExecuted', (error, from, to, data, lookupOnly, txResult) => {
       if (error) return
-      if (!lookupOnly) this.el.querySelector('#value').value = '0'
+      if (!lookupOnly) this.el.querySelector('#value').value = 0
       this.updateAccountBalances()
     })
     this._components = {
@@ -52,6 +52,10 @@ class SettingsUI {
         }
       })
     })
+  }
+
+  validateValue () {
+    if (this.el.querySelector('#value').value === '') this.el.querySelector('#value').value = 0
   }
 
   render () {
@@ -118,7 +122,15 @@ class SettingsUI {
       <div class="${css.crow}">
         <label class="${css.settingsLabel}">Value</label>
         <div class="${css.gasValueContainer}">
-          <input type="text" class="form-control ${css.gasNval} ${css.col2}" id="value" value="0" title="Enter the value and choose the unit">
+          <input
+            type="number"
+            min="0"
+            class="form-control ${css.gasNval} ${css.col2}"
+            id="value"
+            value="0"
+            title="Enter the value and choose the unit"
+            onchange=${() => this.validateValue()}
+          >
           <select name="unit" class="form-control p-1 ${css.gasNvalUnit} ${css.col2_2} custom-select" id="unit">
             <option data-unit="wei">wei</option>
             <option data-unit="gwei">gwei</option>
